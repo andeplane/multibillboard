@@ -42,7 +42,7 @@ import QtQuick 2.0
 import Qt3D 2.0
 import Qt3D.Shapes 2.0
 import Dragly 1.0
-
+import Anderhaf 1.0
 //! [1]
 Viewport  {
     id: rootViewport
@@ -63,7 +63,6 @@ Viewport  {
         eye: Qt.vector3d(21,7,19)
         nearPlane: 5
         farPlane: 50
-
     }
 
     MultiSphere {
@@ -75,5 +74,12 @@ Viewport  {
             blending: true
             useLighting: true
         }
+
+        mts0_io: mts0_io
+        // mts0_io: mts0_io
+    }
+
+    Mts0_io {
+        id: mts0_io
     }
 }

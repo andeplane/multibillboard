@@ -7,10 +7,13 @@
 #include <QtQuick/qquickview.h>
 
 #include <QtCore/qdebug.h>
+#include <mts0_io.h>
 
 int main(int argc, char *argv[])
 {
     qmlRegisterType<MultiBillboard>("Dragly", 1, 0, "MultiSphere");
+    qmlRegisterType<Mts0_io>("Anderhaf", 1, 0, "Mts0_io");
+
     QGuiApplication app(argc, argv);
     QSurfaceFormat f;
     f.setSamples(0);

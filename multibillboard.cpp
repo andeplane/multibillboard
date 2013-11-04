@@ -3,6 +3,7 @@
 #include <QGLBuilder>
 #include <QQuickEffect>
 #include <qmath.h>
+#include <mts0_io.h>
 
 MultiBillboard::MultiBillboard(QQuickItem *parent) :
     QQuickItem3D(parent),
@@ -44,21 +45,21 @@ void MultiBillboard::drawItem(QGLPainter *painter) {
     up.setZ(modelViewMatrix(1,2));
     QGeometryData quad;
 
-    if(m_sortPoints == BackToFront) {
-        QMultiMap<double, QVector3D> sortedPoints;
-        for(int i = 0; i < m_points.length(); i++) {
-            const QVector3D &center = m_points.at(i);
-            const QVector4D &depthVector = painter->modelViewMatrix() * center;
-            double depth = depthVector.z();
-            sortedPoints.insert(depth, center);
-        }
-        m_points.clear();
-        QMapIterator<double, QVector3D> i(sortedPoints);
-        while(i.hasNext()) {
-            m_points.push_back(i.next().value());
-        }
-        sortedPoints.clear();
-    }
+//    if(m_sortPoints == BackToFront) {
+//        QMultiMap<double, QVector3D> sortedPoints;
+//        for(int i = 0; i < m_points.length(); i++) {
+//            const QVector3D &center = m_points.at(i);
+//            const QVector4D &depthVector = painter->modelViewMatrix() * center;
+//            double depth = depthVector.z();
+//            sortedPoints.insert(depth, center);
+//        }
+//        m_points.clear();
+//        QMapIterator<double, QVector3D> i(sortedPoints);
+//        while(i.hasNext()) {
+//            m_points.push_back(i.next().value());
+//        }
+//        sortedPoints.clear();
+//    }
 
     QVector3D a;
     QVector3D b;
@@ -68,8 +69,14 @@ void MultiBillboard::drawItem(QGLPainter *painter) {
     QVector2D tb(0,1);
     QVector2D tc(1,1);
     QVector2D td(1,0);
-    for(int i = 0; i < m_points.length(); i++) {
-        const QVector3D &center = m_points.at(i);
+    Timestep *timestep = m_mts0_io->current_timestep_object;
+    if(timestep == NULL) return;
+
+    for(int n=0; n<timestep->positions.size(); n++) {
+    // for(int i = 0; i < m_points.length(); i++) {
+        vector<float> &r = timestep->positions.at(n);
+
+        const QVector3D &center = QVector3D(r[0], r[1], r[2]);
         if(painter->isCullable(center)) {
             continue;
         }
